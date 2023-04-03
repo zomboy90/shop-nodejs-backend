@@ -1,6 +1,6 @@
 # APIs
 
-[Product Service API](products-service/README.md)
+[Product Service API](product-service/README.md)
 
 # Swagger
 
