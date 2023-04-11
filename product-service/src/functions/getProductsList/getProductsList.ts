@@ -1,8 +1,19 @@
 import { formatJSONResponse } from '@libs/api-gateway';
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { loadData } from '@libs/load-data';
+import { StatusCode } from '@types';
+import { log } from '@libs/log';
+import { ProductService } from '@services/product.service';
+
+const productService = new ProductService();
 
 export const getProductsList: APIGatewayProxyHandler = async () => {
-  const productsList = await loadData();
-  return formatJSONResponse(productsList);
+  log({ message: 'Get product list is triggered' });
+  try {
+    const productsList = await productService.getProducts();
+    return formatJSONResponse(StatusCode.Ok, productsList);
+  } catch(err) {
+    return formatJSONResponse(StatusCode.InternalServerError, {
+      message: err.message
+    });
+  }
 };
