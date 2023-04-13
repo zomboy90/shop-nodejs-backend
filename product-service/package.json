@@ -3,18 +3,35 @@
   "version": "1.0.0",
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
+  "config": {
+    "dynamodb_endpoint_url_local": "http://localhost:8000",
+    "table_products": "products",
+    "table_stocks": "stocks"
+  },
   "scripts": {
     "test": "jest",
     "start:local": "serverless offline start",
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "dynamodb:start:local": "docker-compose up",
+    "dynamodb:getTables": "aws dynamodb list-tables",
+    "dynamodb:getTables:local": "npm run dynamodb:getTables -- --endpoint-url $npm_package_config_dynamodb_endpoint_url_local",
+    "dynamodb:createTables": "./scripts/create-tables.sh",
+    "dynamodb:createTables:local": "npm run dynamodb:createTables -- --endpoint-url $npm_package_config_dynamodb_endpoint_url_local",
+    "dynamodb:deleteTables": "./scripts/delete-tables.sh",
+    "dynamodb:deleteTables:local": "npm run dynamodb:deleteTables -- --endpoint-url $npm_package_config_dynamodb_endpoint_url_local",
+    "dynamodb:fillTables": "./scripts/fill-tables.sh",
+    "dynamodb:fillTables:local": "npm run dynamodb:fillTables -- --endpoint-url $npm_package_config_dynamodb_endpoint_url_local"
   },
   "engines": {
     "node": ">=14.15.0"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.309.0",
+    "@aws-sdk/lib-dynamodb": "^3.310.0",
     "@middy/core": "^3.4.0",
     "@middy/http-cors": "^4.2.8",
-    "@middy/http-json-body-parser": "^3.4.0"
+    "@middy/http-json-body-parser": "^3.4.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",
