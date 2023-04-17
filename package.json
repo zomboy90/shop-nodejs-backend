@@ -1,0 +1,25 @@
+{
+  "name": "shop-nodejs-backend",
+  "version": "1.0.0",
+  "description": "[Product Service API](product-service/README.md)",
+  "main": " ",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "service:create": "serverless create -t aws-nodejs-typescript -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/zomboy90/shop-nodejs-backend.git"
+  },
+  "keywords": [
+    "aws",
+    "nodejs",
+    "typescript"
+  ],
+  "author": "raj_mameday@epam.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zomboy90/shop-nodejs-backend/issues"
+  },
+  "homepage": "https://github.com/zomboy90/shop-nodejs-backend#readme"
+}
