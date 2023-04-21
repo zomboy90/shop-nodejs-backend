@@ -16,6 +16,8 @@ const serverlessConfiguration: AWS = {
       shouldStartNameWithService: true,
     },
     environment: {
+      ACCOUNT_ID: '${self:custom.accountId}',
+      QUEUE_NAME: '${self:custom.queueName}',
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       REGION: '${self:provider.region}',
@@ -36,6 +38,13 @@ const serverlessConfiguration: AWS = {
         ],
         Resource: 'arn:aws:s3:::${self:custom.bucketName}/*'
       },
+      {
+        Effect: 'Allow',
+        Action: [
+          'sqs:SendMessage'
+        ],
+        Resource: 'arn:aws:sqs:${self:provider.region}:${self:custom.accountId}:*'
+      }
     ]
   },
   // import the function via paths
@@ -45,6 +54,8 @@ const serverlessConfiguration: AWS = {
     bucketName: 'zombo-shop-1-uploaded',
     uploadedFolder: 'uploaded',
     parsedFolder: 'parsed',
+    accountId: '649764365395',
+    queueName: 'catalogItemsQueue',
     esbuild: {
       bundle: true,
       minify: true,

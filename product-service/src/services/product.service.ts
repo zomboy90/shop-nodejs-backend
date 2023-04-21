@@ -1,6 +1,7 @@
 import { AttributeValue, ScanCommand, ScanCommandOutput, TransactWriteItemsCommand, ExecuteStatementCommand, ExecuteStatementCommandOutput } from '@aws-sdk/client-dynamodb';
 import { DBService } from './db.service';
-import { Product, Stock } from '@types';
+import { Product, Stock, CreateProductDTO } from '@types';
+import { v4 as uuidv4 } from 'uuid';
 
 export class ProductService {
   private readonly dbService: DBService;
@@ -62,7 +63,11 @@ export class ProductService {
     }
   };
 
-  public async createProduct(product: Product, stock: Stock): Promise<string> {
+  public async createProduct(createProductDTO: CreateProductDTO): Promise<string> {
+    const { title, description, price, count } = createProductDTO;
+    const product: Product = { id: uuidv4(), title, description, price };
+    const stock: Stock = { product_id: product.id, count };
+
     const params = {
       TransactItems: [
         {
@@ -84,12 +89,8 @@ export class ProductService {
       ]
     };
 
-    try {
-      await this.dbService.ddbClient.send(new TransactWriteItemsCommand(params));
-      return product.id;
-    } catch(err) {
-      throw new Error(`${err.name} ${err.message}`);
-    }
+    await this.dbService.ddbClient.send(new TransactWriteItemsCommand(params));
+    return product.id;
   }
 
   public async getProductById(id: string): Promise<Product[]> {

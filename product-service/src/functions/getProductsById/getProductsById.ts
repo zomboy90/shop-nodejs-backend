@@ -2,17 +2,15 @@ import { formatJSONResponse } from "@libs/api-gateway";
 import { ProductService } from "@services/product.service";
 import { StatusCode } from "@types";
 import { APIGatewayProxyHandler } from "aws-lambda";
-import { log } from '@libs/log';
+import { log, LogLevel } from '@libs/log';
 
 const productService = new ProductService();
 
 export const getProductsById: APIGatewayProxyHandler = async (event) => {
   const { productId } = event.pathParameters;
 
-  log({
-    message: 'Get product by id is triggered',
-    body: productId
-  });
+  log(LogLevel.Info, 'Get product by id is triggered');
+  log(LogLevel.Info, productId);
 
   try {
     const product = await productService.getProductById(productId);

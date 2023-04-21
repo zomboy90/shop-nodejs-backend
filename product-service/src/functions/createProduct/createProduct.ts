@@ -1,30 +1,23 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
-import { log } from '@libs/log';
-import { v4 as uuidv4 } from 'uuid';
+import { LogLevel, log } from '@libs/log';
 import { ProductService } from '@services/product.service';
 import schema from './schema';
-import { StatusCode } from '@types';
+import { CreateProductDTO, StatusCode } from '@types';
 
 const productService = new ProductService();
 
 export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  const { title, description, price, count } = event.body;
+  log(LogLevel.Info, 'Creation of product is triggered');
+  log(LogLevel.Info, event.body);
 
-  log({
-    message: 'Creation of product is triggered',
-    body: event.body
-  });
-
-  const product = { id: uuidv4(), title, description, price };
-  const stock = { product_id: product.id, count };
+  const { title } = event.body;
 
   try {
-    const id = await productService.createProduct(product, stock);
+    const id = await productService.createProduct(event.body as CreateProductDTO);
 
     return formatJSONResponse(StatusCode.Ok, {
-      message: `Product "${ title }" successfully created.`,
-      id
+      message: `Product "${ title }" successfully created with id ${ id }`
     });
   } catch(err) {
     return formatJSONResponse(StatusCode.InternalServerError, {

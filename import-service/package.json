@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.312.0",
     "@aws-sdk/client-s3": "^3.312.0",
+    "@aws-sdk/client-sqs": "^3.315.0",
     "@aws-sdk/credential-providers": "^3.312.0",
     "@aws-sdk/hash-node": "^3.310.0",
     "@aws-sdk/protocol-http": "^3.310.0",
