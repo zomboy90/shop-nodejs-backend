@@ -77,6 +77,27 @@ const serverlessConfiguration: AWS = {
         Type: 'AWS::S3::Bucket',
         Properties: {
           BucketName: '${self:custom.bucketName}',
+          CorsConfiguration: {
+            CorsRules: [
+                {
+                    AllowedOrigins: ['*'],
+                    AllowedHeaders: ['*'],
+                    AllowedMethods: ['PUT'],
+                    MaxAge: 3000
+                }
+            ]
+          }
+        }
+      },
+      ApiGatewayResponse4XX: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Methods': "'GET,PUT,POST,OPTIONS'"
+          },
+          RestApiId: '88xgxr26h3',
+          ResponseType: 'DEFAULT_4XX'
         }
       }
     }
